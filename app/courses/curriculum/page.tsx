@@ -1,0 +1,670 @@
+"use client";
+
+import React, { useState } from "react";
+
+type Course = {
+  title: string;
+  subtitle: string;
+  tag: string;
+  icon: React.ReactNode;
+  points: string[];
+  details: {
+    overview: string;
+    duration: string;
+    level: string;
+    topics: { heading: string; items: string[] }[];
+    outcomes: string[];
+  };
+};
+
+const IconBox = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <rect x="1" y="1" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
+    <rect x="11" y="1" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
+    <rect x="1" y="11" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M11 14.5h7M14.5 11v7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconChart = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <path d="M2 14l5-5 4 3 5-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <rect x="1" y="1" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5"/>
+  </svg>
+);
+const IconCode = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <polyline points="6,7 2,10 6,13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <polyline points="14,7 18,10 14,13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <line x1="12" y1="4" x2="8" y2="16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconCart = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <path d="M2 5h16l-1.5 9H3.5L2 5z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+    <circle cx="7" cy="18" r="1" stroke="currentColor" strokeWidth="1.5"/>
+    <circle cx="14" cy="18" r="1" stroke="currentColor" strokeWidth="1.5"/>
+  </svg>
+);
+const IconFactory = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <path d="M1 19V8l5-3v3l5-3v3l5-3v13H1z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+    <rect x="7" y="13" width="3" height="6" stroke="currentColor" strokeWidth="1.5"/>
+    <rect x="12" y="13" width="3" height="4" stroke="currentColor" strokeWidth="1.5"/>
+  </svg>
+);
+const IconUsers = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <circle cx="8" cy="6" r="3" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M2 19c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <path d="M14 10a3 3 0 000-6M18 19c0-2.761-1.79-5.112-4.273-5.817" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconCloud = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <path d="M5 14a4 4 0 01-.5-7.95A5.5 5.5 0 0115.95 8H16a3 3 0 010 6H5z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+  </svg>
+);
+const IconGear = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <circle cx="10" cy="10" r="3" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M10 1v2M10 17v2M1 10h2M17 10h2M3.22 3.22l1.42 1.42M15.36 15.36l1.42 1.42M3.22 16.78l1.42-1.42M15.36 4.64l1.42-1.42" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconLink = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <path d="M8 12a4 4 0 005.66 0l2.83-2.83a4 4 0 00-5.66-5.66L9.17 5.17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <path d="M12 8a4 4 0 00-5.66 0L3.51 10.83a4 4 0 005.66 5.66l1.66-1.66" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const IconStar = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <polygon points="10,2 12.5,7.5 18.5,8 14,12.5 15.5,18.5 10,15.5 4.5,18.5 6,12.5 1.5,8 7.5,7.5" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+  </svg>
+);
+const IconWarehouse = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <path d="M1 8l9-6 9 6v11H1V8z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+    <path d="M7 19v-7h6v7" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+  </svg>
+);
+const IconAriba = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M6 14l4-8 4 8M7.5 11h5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+
+const courses: { functional: Course[]; technical: Course[] } = {
+  functional: [
+    {
+      title: "SAP MM", subtitle: "Materials Management", tag: "Functional", icon: <IconBox />,
+      points: ["Procurement lifecycle", "Inventory management", "Vendor evaluation", "Invoice verification"],
+      details: {
+        overview: "SAP MM covers the complete procure-to-pay cycle used across manufacturing, retail, and service industries. Trainees work on real-time business scenarios from purchase requisition all the way through vendor payment.",
+        duration: "6–8 Weeks", level: "Beginner to Advanced",
+        topics: [
+          { heading: "Procurement", items: ["Enterprise structure & org setup", "Material master & vendor master", "Purchase requisition & purchase orders", "RFQ, quotation & contract management"] },
+          { heading: "Inventory", items: ["Goods receipt, transfer & issue", "Stock transfer orders (STO)", "Physical inventory & batch mgmt", "Special procurement (consignment, SB)"] },
+          { heading: "Invoice & Valuation", items: ["Logistics invoice verification (LIV)", "ERS & GR/IR clearing", "Automatic account determination", "Price control: MAP vs standard price"] },
+        ],
+        outcomes: ["Configure MM org structure in S/4HANA", "Execute end-to-end procurement process", "Manage inventory movements & valuations", "Perform vendor invoice verification"],
+      },
+    },
+    {
+      title: "SAP SD", subtitle: "Sales & Distribution", tag: "Functional", icon: <IconCart />,
+      points: ["Order-to-cash cycle", "Pricing & billing", "Shipping & logistics", "Customer master data"],
+      details: {
+        overview: "SAP SD manages the complete order-to-cash cycle. You will learn how businesses handle inquiries, quotations, sales orders, deliveries, and billing — covering both configuration and end-user operations.",
+        duration: "6–8 Weeks", level: "Beginner to Advanced",
+        topics: [
+          { heading: "Sales", items: ["Enterprise structure & master data", "Inquiry, quotation & sales orders", "Pricing procedures & condition technique", "Credit management & partner functions"] },
+          { heading: "Shipping & Delivery", items: ["Outbound delivery creation", "Picking, packing & goods issue", "Route determination & shipping points", "Third-party & drop-ship processes"] },
+          { heading: "Billing", items: ["Invoice & billing document types", "Billing plans & down payments", "Credit/debit memo processing", "Revenue account determination"] },
+        ],
+        outcomes: ["Configure SD enterprise structure", "Handle complete sales order cycles", "Set up pricing & condition records", "Manage delivery and billing processes"],
+      },
+    },
+    {
+      title: "SAP FICO", subtitle: "Finance & Controlling", tag: "Functional", icon: <IconChart />,
+      points: ["Financial accounting (FI)", "Cost controlling (CO)", "General ledger & reporting", "Asset & bank accounting"],
+      details: {
+        overview: "SAP FICO is the most sought-after module in enterprise finance. The training covers both FI (statutory accounting) and CO (management accounting), with real-time integration scenarios across MM, SD, and PP.",
+        duration: "8–10 Weeks", level: "Intermediate",
+        topics: [
+          { heading: "Financial Accounting", items: ["Company code & chart of accounts", "General ledger & document posting", "Accounts payable & receivable", "Asset accounting & bank reconciliation"] },
+          { heading: "Controlling (CO)", items: ["Cost center & profit center accounting", "Internal orders & WBS elements", "Product costing & material ledger", "Profitability analysis (CO-PA)"] },
+          { heading: "Period-End & Reporting", items: ["Month-end & year-end closing", "Financial statements variant", "Budget monitoring & planning", "S/4HANA Universal Journal (ACDOCA)"] },
+        ],
+        outcomes: ["Configure chart of accounts & GL", "Manage AP, AR & asset accounting", "Run cost center & profit center reports", "Perform period-end financial closing"],
+      },
+    },
+    {
+      title: "SAP PP", subtitle: "Production Planning", tag: "Functional", icon: <IconFactory />,
+      points: ["Production planning & MRP", "Shop floor control", "Bill of materials & routing", "Demand management"],
+      details: {
+        overview: "SAP PP integrates manufacturing with supply chain and finance. You will learn how industries plan production schedules, execute manufacturing orders, and manage capacity — all in the S/4HANA environment.",
+        duration: "6 Weeks", level: "Beginner to Advanced",
+        topics: [
+          { heading: "Master Data", items: ["Material master (MRP views)", "Bill of materials (BOM)", "Work centers & routings", "Production versions"] },
+          { heading: "Planning", items: ["Demand management & PIR", "Sales & operations planning (SOP)", "MRP run & planning results", "Capacity requirements planning"] },
+          { heading: "Execution", items: ["Production order creation & release", "Goods issue & confirmation", "Shop floor papers & QM integration", "Batch management in PP"] },
+        ],
+        outcomes: ["Configure PP org structure", "Create BOM, routings & work centers", "Run MRP and interpret results", "Execute & confirm production orders"],
+      },
+    },
+    {
+      title: "SAP HCM", subtitle: "Human Capital Management", tag: "Functional", icon: <IconUsers />,
+      points: ["Payroll management", "Employee lifecycle", "Time management", "Organizational management"],
+      details: {
+        overview: "SAP HCM covers the full employee lifecycle from recruitment through retirement. The course includes org structure setup, personnel administration, time management, and payroll configuration.",
+        duration: "6 Weeks", level: "Beginner to Intermediate",
+        topics: [
+          { heading: "Personnel Administration", items: ["Org management & positions", "Employee master & infotypes", "Personnel actions (hire, transfer, exit)", "Dynamic actions & features"] },
+          { heading: "Time Management", items: ["Work schedule rules", "Absence & attendance types", "Time evaluation (schema)", "Shift planning & overtime"] },
+          { heading: "Payroll", items: ["Payroll area & control record", "Wage types & pay scale", "Off-cycle & retroactive payroll", "Tax & statutory deductions (India)"] },
+        ],
+        outcomes: ["Configure organizational structure", "Manage employee infotypes", "Set up time evaluation schemas", "Run payroll and statutory reports"],
+      },
+    },
+    {
+      title: "SAP SRM", subtitle: "Supplier Relationship Mgmt", tag: "Functional", icon: <IconAriba />,
+      points: ["Self-service procurement", "Supplier collaboration portal", "Contract lifecycle management", "Catalog & shopping cart"],
+      details: {
+        overview: "SAP SRM streamlines procurement and supplier collaboration. It covers self-service requisitioning, strategic sourcing, and contract management — integrated with SAP MM and backend ERP systems.",
+        duration: "4–5 Weeks", level: "Intermediate",
+        topics: [
+          { heading: "Self-Service Procurement", items: ["Shopping cart creation", "Catalog-based purchasing", "Approval workflows", "Shopping cart to PO transfer"] },
+          { heading: "Strategic Sourcing", items: ["RFx (RFI, RFQ, RFP) creation", "Bidder invitation & evaluation", "Auction management", "Bid comparison & award"] },
+          { heading: "Contract Management", items: ["Central contracts in SRM", "Release orders from contracts", "Contract monitoring & alerts", "Integration with SAP MM contracts"] },
+        ],
+        outcomes: ["Configure SRM org structure", "Manage self-service shopping carts", "Run RFx sourcing events", "Set up contract lifecycle management"],
+      },
+    },
+  ],
+  technical: [
+    {
+      title: "SAP ABAP", subtitle: "Advanced Business Application Programming", tag: "Technical", icon: <IconCode />,
+      points: ["Development environment setup", "Data Dictionary & programming constructs", "Enhancements, forms & outputs", "OOP, DB access, integration, debugging"],
+      details: {
+        overview: "SAP ABAP (Advanced Business Application Programming) is a high-level programming language created by SAP SE for developing applications on the SAP platform. ABAP is the primary language used for programming the SAP R/3 system, which includes modules such as Financial Accounting (FI), Sales and Distribution (SD), and Materials Management (MM). It allows developers to create custom reports, interfaces, forms, workflows, and enhancements tailored to the specific needs of an organization.",
+        duration: "8–10 Weeks", level: "Beginner to Advanced",
+        topics: [
+          { heading: "Course Module Illustration", items: ["Development Environment", "Data Dictionary", "Programming Constructs"] },
+          { heading: "Advanced Development", items: ["Enhancements and Modifications", "Forms and Outputs", "Object-Oriented Programming (OOP)"] },
+          { heading: "System & Integration", items: ["Database Access", "Integration and Communication", "Debugging and Testing"] },
+        ],
+        outcomes: ["Who can learn: Software Developers", "Who can learn: SAP Consultants", "Who can learn: Business Analysts", "Who can learn: Students and Graduates"],
+      },
+    },
+    {
+      title: "SAP BASIS", subtitle: "System Administration", tag: "Technical", icon: <IconGear />,
+      points: ["System installation & config", "User & role management", "Transport management (TMS)", "Performance monitoring"],
+      details: {
+        overview: "SAP BASIS is the technical backbone of every SAP landscape. You will learn how to install, configure, monitor, and maintain SAP systems — including both on-premise and cloud-based S/4HANA environments.",
+        duration: "6 Weeks", level: "Intermediate",
+        topics: [
+          { heading: "Administration", items: ["SAP system landscape (DEV/QAS/PRD)", "Client administration & system copy", "Transport management system (TMS)", "Batch job scheduling (SM36/SM37)"] },
+          { heading: "Security", items: ["User master records & roles", "Authorization objects & profile generator", "SU10, SU24 & security audit logs", "Single sign-on (SSO) concepts"] },
+          { heading: "Performance & Monitoring", items: ["Work process & memory monitoring", "ST05 SQL trace & system traces", "Database administration (HANA basics)", "Early watch alert & solution manager"] },
+        ],
+        outcomes: ["Administer SAP system landscapes", "Create roles & manage authorizations", "Manage transport requests", "Monitor system performance & health"],
+      },
+    },
+    {
+      title: "SAP BI/BW", subtitle: "Business Intelligence & Warehousing", tag: "Technical", icon: <IconChart />,
+      points: ["Data modelling & InfoProviders", "ETL extraction & transformation", "BEx & Analysis for Office", "BW/4HANA analytics"],
+      details: {
+        overview: "SAP BI/BW enables enterprise-grade data warehousing and analytics. You will learn to model data flows from source systems to reporting layers — covering both classic BW and the modern BW/4HANA platform.",
+        duration: "7–8 Weeks", level: "Intermediate to Advanced",
+        topics: [
+          { heading: "Data Modelling", items: ["InfoObjects (characteristics & key figures)", "DataStore objects (DSO & ADSO)", "CompositeProviders & InfoCubes", "BW/4HANA modelling with HANA views"] },
+          { heading: "ETL & Data Flow", items: ["DataSources & extractors (LO/FI/HR)", "Transformation rules & routines", "Data Transfer Process (DTP)", "Process chains & scheduling"] },
+          { heading: "Reporting", items: ["BEx query designer & analyzer", "Analysis for Office (AO)", "SAP Analytics Cloud (SAC) integration", "Workbooks & dashboard creation"] },
+        ],
+        outcomes: ["Design BW data models & InfoProviders", "Build ETL pipelines with process chains", "Create BEx queries & AO reports", "Migrate models to BW/4HANA"],
+      },
+    },
+    {
+      title: "SAP BTP", subtitle: "Business Technology Platform", tag: "Technical", icon: <IconCloud />,
+      points: ["BTP cockpit & subaccounts", "SAP Integration Suite (CPI)", "CAP framework & extensions", "API management & event mesh"],
+      details: {
+        overview: "SAP BTP is SAP's strategic cloud platform for building extensions, integrations, and analytics. This course covers the full BTP portfolio — from integration flows in CPI to building full-stack cloud apps with CAP.",
+        duration: "7–8 Weeks", level: "Advanced",
+        topics: [
+          { heading: "Platform Basics", items: ["BTP global account & subaccounts", "Cloud Foundry & Kyma environments", "Service marketplace & service bindings", "Identity & access management (IAS)"] },
+          { heading: "Integration Suite (CPI)", items: ["Integration flows (iFlows) design", "Message mapping & XSLT", "Adapter types: HTTP, SFTP, SOAP, OData", "Error handling & monitoring"] },
+          { heading: "App Development", items: ["CAP (Cloud Application Programming) model", "SAP Fiori elements & SAPUI5 basics", "OData services & annotations", "Side-by-side extensions on S/4HANA"] },
+        ],
+        outcomes: ["Navigate BTP cockpit & provision services", "Build and deploy CPI integration flows", "Develop CAP applications with OData", "Manage APIs in API Business Hub"],
+      },
+    },
+    {
+      title: "SAP EWM", subtitle: "Extended Warehouse Management", tag: "Technical", icon: <IconWarehouse />,
+      points: ["Warehouse structure & master data", "Inbound & outbound processes", "Slotting & optimization", "Labour management & RF"],
+      details: {
+        overview: "SAP EWM provides advanced warehouse management beyond classic WM. It handles complex warehouse operations including multi-step putaway strategies, wave management, and yard management — fully embedded in S/4HANA.",
+        duration: "5–6 Weeks", level: "Intermediate to Advanced",
+        topics: [
+          { heading: "Warehouse Structure", items: ["Warehouse number, section & activity area", "Storage type, bin & door configuration", "EWM master data: product & business partner", "Handling unit management (HUM)"] },
+          { heading: "Inbound & Outbound", items: ["Inbound delivery & putaway strategies", "Goods receipt posting & slotting", "Pick, pack & goods issue process", "Wave management & work centres"] },
+          { heading: "Advanced Features", items: ["Labour management & task interleaving", "Yard management & cross docking", "RF framework & mobile transactions", "Integration with TM & PP-PI"] },
+        ],
+        outcomes: ["Configure EWM warehouse structure", "Manage inbound & outbound deliveries", "Set up putaway & picking strategies", "Implement RF mobile transactions"],
+      },
+    },
+    {
+      title: "SAP CPI", subtitle: "Cloud Platform Integration", tag: "Technical", icon: <IconLink />,
+      points: ["iFlow design & deployment", "Message mapping & transformation", "Adapter configuration", "Error handling & monitoring"],
+      details: {
+        overview: "SAP CPI (Cloud Platform Integration), now part of SAP Integration Suite, is the middleware for connecting SAP and non-SAP systems in the cloud. Learn to design, deploy, and monitor real integration scenarios.",
+        duration: "5–6 Weeks", level: "Advanced",
+        topics: [
+          { heading: "iFlow Design", items: ["Integration flow components & palettes", "Router, aggregator & multicast steps", "Splitter, gather & parallel processing", "Content modifier & script steps"] },
+          { heading: "Mapping & Transformation", items: ["Message mapping (graphical)", "XSLT & Groovy mapping", "JSON to XML conversion", "Value mapping & code lists"] },
+          { heading: "Adapters & Operations", items: ["OData, SOAP, REST & HTTP adapters", "SFTP, AS2 & Mail adapters", "S/4HANA & SuccessFactors adapters", "Alert management & trace monitoring"] },
+        ],
+        outcomes: ["Design and deploy iFlows on CPI", "Create message & XSLT mappings", "Configure OData and SFTP adapters", "Monitor integration artifacts & errors"],
+      },
+    },
+    {
+      title: "SAP Ariba", subtitle: "Procurement & Supply Chain Network", tag: "Technical", icon: <IconAriba />,
+      points: ["Ariba sourcing & RFx events", "Supplier portal & onboarding", "Contract workspace management", "Integration with SAP MM"],
+      details: {
+        overview: "SAP Ariba is a cloud-based procurement network connecting buyers and suppliers globally. This course covers sourcing, procurement, and contract management on Ariba — plus integration with backend SAP ERP systems.",
+        duration: "4–5 Weeks", level: "Intermediate",
+        topics: [
+          { heading: "Sourcing", items: ["RFI, RFQ & RFP event setup", "Supplier invitation & bidding", "Bid evaluation & scoring", "Award scenarios & supplier feedback"] },
+          { heading: "Procurement", items: ["Catalog punch-out setup", "Shopping cart & PR management", "PO collaboration with suppliers", "Invoice & receipt reconciliation"] },
+          { heading: "Contract & Integration", items: ["Contract workspace creation", "Milestone & compliance tracking", "Ariba Network supplier onboarding", "ERP integration via CIG/MID"] },
+        ],
+        outcomes: ["Run sourcing events & evaluate bids", "Configure supplier onboarding on Ariba Network", "Manage contract workspaces & milestones", "Integrate Ariba with SAP MM/ERP"],
+      },
+    },
+    {
+      title: "SAP SuccessFactors", subtitle: "Cloud HR & Talent Management", tag: "Technical", icon: <IconStar />,
+      points: ["Employee Central (core HR)", "Recruiting & onboarding", "Performance & goal management", "Learning management (LMS)"],
+      details: {
+        overview: "SAP SuccessFactors is SAP's cloud-based HXM suite. This course covers Employee Central, talent management modules, and integration with SAP HCM/S/4HANA — widely adopted by MNCs globally.",
+        duration: "6–7 Weeks", level: "Intermediate",
+        topics: [
+          { heading: "Employee Central", items: ["Foundation objects & org chart", "Employee data & job information", "Position management", "Time off & absence management"] },
+          { heading: "Talent Suite", items: ["Recruiting management (RCM)", "Onboarding 2.0 workflow", "Performance & goals (PMGM)", "Succession & development planning"] },
+          { heading: "Integration & Admin", items: ["BizX admin tools & permissions", "Integration with SAP HCM via CPI", "MDF objects & business rules", "Reporting & analytics (Story Reports)"] },
+        ],
+        outcomes: ["Configure Employee Central org structure", "Manage recruiting & onboarding workflows", "Set up performance & goal cycles", "Build integrations with SAP HCM"],
+      },
+    },
+  ],
+};
+
+const CloseIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+const ArrowIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const CheckIcon = () => (
+  <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
+    <path d="M1.5 4.5l2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const ChevronIcon = () => (
+  <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+    <path d="M3 4l2 2 2-2" stroke="#93c5fd" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const ModuleModal = ({ course, onClose }: { course: Course; onClose: () => void }) => (
+  <div
+    style={{ position:"fixed", inset:0, zIndex:100, background:"rgba(10,22,40,0.7)", backdropFilter:"blur(6px)", display:"flex", alignItems:"center", justifyContent:"center", padding:16 }}
+    onClick={onClose}
+  >
+    <div
+      onClick={e => e.stopPropagation()}
+      style={{ background:"#fff", border:"1px solid #dbeafe", borderRadius:20, width:"100%", maxWidth:820, maxHeight:"90vh", overflowY:"auto", boxShadow:"0 24px 80px rgba(37,99,235,0.15)", fontFamily:"'Plus Jakarta Sans',sans-serif", position:"relative" }}
+    >
+      <div style={{ height:4, background:"linear-gradient(90deg,#1d4ed8,#3b82f6,#93c5fd)", borderRadius:"20px 20px 0 0" }} />
+      <div style={{ padding:"clamp(20px,4vw,36px)" }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:24, gap:12 }}>
+          <div style={{ display:"flex", alignItems:"center", gap:14 }}>
+            <div style={{ width:52, height:52, borderRadius:14, background:"#eff6ff", border:"1.5px solid #bfdbfe", display:"flex", alignItems:"center", justifyContent:"center", color:"#1d4ed8", flexShrink:0 }}>
+              {course.icon}
+            </div>
+            <div>
+              <div style={{ fontSize:"0.68rem", fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase", color:"#2563eb", marginBottom:4 }}>
+                {course.tag} Module
+              </div>
+              <h2 style={{ fontWeight:800, fontSize:"clamp(1.2rem,3vw,1.6rem)", color:"#0a1628", margin:"0 0 2px", letterSpacing:"-0.02em" }}>{course.title}</h2>
+              <p style={{ color:"#64748b", fontSize:"0.82rem", margin:0, fontWeight:400 }}>{course.subtitle}</p>
+            </div>
+          </div>
+          <button onClick={onClose} title="Close modal" aria-label="Close modal" style={{ background:"#f8faff", border:"1px solid #e0eaff", borderRadius:8, padding:8, cursor:"pointer", color:"#64748b", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, transition:"all 0.2s" }}>
+            <CloseIcon />
+          </button>
+        </div>
+
+        <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:24 }}>
+          {[{ label:"Duration", val:course.details.duration }, { label:"Level", val:course.details.level }].map(m => (
+            <div key={m.label} style={{ background:"#eff6ff", border:"1px solid #bfdbfe", borderRadius:8, padding:"8px 16px" }}>
+              <div style={{ fontSize:"0.62rem", textTransform:"uppercase", letterSpacing:"0.1em", color:"#64748b", marginBottom:2, fontWeight:600 }}>{m.label}</div>
+              <div style={{ fontSize:"0.84rem", color:"#1d4ed8", fontWeight:700 }}>{m.val}</div>
+            </div>
+          ))}
+        </div>
+
+        <p style={{ color:"#4a5a75", lineHeight:1.8, fontSize:"0.88rem", marginBottom:28, paddingBottom:24, borderBottom:"1px solid #e0eaff", fontWeight:400 }}>{course.details.overview}</p>
+
+        <div style={{ fontSize:"0.65rem", fontWeight:700, letterSpacing:"0.12em", textTransform:"uppercase", color:"#94a3b8", marginBottom:14 }}>Curriculum Topics</div>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:12, marginBottom:28 }}>
+          {course.details.topics.map(t => (
+            <div key={t.heading} style={{ background:"#f8faff", border:"1px solid #e0eaff", borderRadius:10, padding:"16px" }}>
+              <div style={{ fontSize:"0.68rem", fontWeight:700, letterSpacing:"0.08em", textTransform:"uppercase", color:"#1d4ed8", marginBottom:10 }}>{t.heading}</div>
+              {t.items.map(item => (
+                <div key={item} style={{ display:"flex", alignItems:"flex-start", gap:8, marginBottom:7 }}>
+                  <ChevronIcon />
+                  <span style={{ fontSize:"0.78rem", color:"#4a5a75", lineHeight:1.5, fontWeight:400 }}>{item}</span>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        <div style={{ fontSize:"0.65rem", fontWeight:700, letterSpacing:"0.12em", textTransform:"uppercase", color:"#94a3b8", marginBottom:14 }}>Learning Outcomes</div>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:10 }}>
+          {course.details.outcomes.map(o => (
+            <div key={o} style={{ display:"flex", alignItems:"flex-start", gap:10 }}>
+              <div style={{ width:20, height:20, borderRadius:"50%", flexShrink:0, marginTop:1, background:"#f0fdf4", border:"1.5px solid #86efac", display:"flex", alignItems:"center", justifyContent:"center", color:"#16a34a" }}>
+                <CheckIcon />
+              </div>
+              <span style={{ fontSize:"0.81rem", color:"#4a5a75", lineHeight:1.55, fontWeight:400 }}>{o}</span>
+            </div>
+          ))}
+        </div>
+
+        <button
+          onClick={() => window.open("https://wa.me/91XXXXXXXXXX", "_blank")}
+          style={{ marginTop:28, width:"100%", background:"linear-gradient(135deg,#1d4ed8,#2563eb)", color:"#fff", border:"none", borderRadius:10, padding:"14px 24px", fontFamily:"'Plus Jakarta Sans',sans-serif", fontWeight:700, fontSize:"0.88rem", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:8, boxShadow:"0 4px 14px rgba(37,99,235,0.3)" }}
+        >
+          Enroll in {course.title} <ArrowIcon />
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
+const ModuleListModal = ({ type, items, onClose, onSelect }: { type:"Functional"|"Technical"; items:Course[]; onClose:()=>void; onSelect:(c:Course)=>void }) => (
+  <div
+    style={{ position:"fixed", inset:0, zIndex:90, background:"rgba(10,22,40,0.7)", backdropFilter:"blur(6px)", display:"flex", alignItems:"center", justifyContent:"center", padding:16 }}
+    onClick={onClose}
+  >
+    <div
+      onClick={e => e.stopPropagation()}
+      style={{ background:"#fff", border:"1px solid #dbeafe", borderRadius:20, width:"100%", maxWidth:680, maxHeight:"88vh", overflowY:"auto", boxShadow:"0 24px 80px rgba(37,99,235,0.15)", fontFamily:"'Plus Jakarta Sans',sans-serif" }}
+    >
+      <div style={{ height:4, background:"linear-gradient(90deg,#1d4ed8,#3b82f6,#93c5fd)", borderRadius:"20px 20px 0 0" }} />
+      <div style={{ padding:"clamp(20px,4vw,32px)" }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:24 }}>
+          <div>
+            <div style={{ fontSize:"0.65rem", fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase", color:"#2563eb", marginBottom:5 }}>{type}</div>
+            <h2 style={{ fontWeight:800, fontSize:"clamp(1.1rem,3vw,1.45rem)", color:"#0a1628", margin:0, letterSpacing:"-0.02em" }}>{type} Modules</h2>
+          </div>
+          <button onClick={onClose} title="Close modal" aria-label="Close modal" style={{ background:"#f8faff", border:"1px solid #e0eaff", borderRadius:8, padding:8, cursor:"pointer", color:"#64748b", display:"flex", alignItems:"center", justifyContent:"center" }}>
+            <CloseIcon />
+          </button>
+        </div>
+        <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+          {items.map(course => (
+            <button
+              key={course.title}
+              onClick={() => onSelect(course)}
+              style={{ background:"#fafbff", border:"1.5px solid #e0eaff", borderRadius:12, padding:"14px 18px", cursor:"pointer", width:"100%", textAlign:"left", display:"flex", alignItems:"center", justifyContent:"space-between", transition:"all 0.2s ease", gap:12, fontFamily:"'Plus Jakarta Sans',sans-serif" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor="#93c5fd"; (e.currentTarget as HTMLElement).style.background="#eff6ff"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor="#e0eaff"; (e.currentTarget as HTMLElement).style.background="#fafbff"; }}
+            >
+              <div style={{ display:"flex", alignItems:"center", gap:14 }}>
+                <div style={{ width:40, height:40, borderRadius:10, background:"#eff6ff", border:"1px solid #bfdbfe", display:"flex", alignItems:"center", justifyContent:"center", color:"#1d4ed8", flexShrink:0 }}>
+                  {course.icon}
+                </div>
+                <div>
+                  <div style={{ fontWeight:700, color:"#0a1628", fontSize:"0.9rem" }}>{course.title}</div>
+                  <div style={{ color:"#64748b", fontSize:"0.75rem", marginTop:2, fontWeight:400 }}>{course.subtitle}</div>
+                </div>
+              </div>
+              <div style={{ display:"flex", alignItems:"center", gap:10, flexShrink:0 }}>
+                <span style={{ fontSize:"0.72rem", color:"#1d4ed8", fontWeight:600, background:"#eff6ff", border:"1px solid #bfdbfe", padding:"3px 10px", borderRadius:99, whiteSpace:"nowrap" }}>{course.details.duration}</span>
+                <div style={{ color:"#1d4ed8" }}><ArrowIcon /></div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const Curriculum = () => {
+  const [listModal, setListModal] = useState<"Functional"|"Technical"|null>(null);
+  const [detailModal, setDetailModal] = useState<Course|null>(null);
+
+  const tracks = [
+    {
+      type: "Functional" as const,
+      label: "Functional Modules",
+      eyebrow: "Business Process Track",
+      desc: "Business-process oriented training covering finance, procurement, sales, production, HR, and supplier management. No deep coding required — ideal for domain experts and business analysts.",
+      items: courses.functional,
+      count: courses.functional.length,
+    },
+    {
+      type: "Technical" as const,
+      label: "Technical Modules",
+      eyebrow: "Developer & Admin Track",
+      desc: "Developer and administrator training covering programming, system admin, analytics, cloud platforms, integrations, and EWM. Ideal for IT professionals and developers.",
+      items: courses.technical,
+      count: courses.technical.length,
+    },
+  ];
+
+  return (
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&display=swap');
+        .curr-grid-bg {
+          position:absolute; inset:0;
+          background-image: linear-gradient(rgba(37,99,235,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.035) 1px, transparent 1px);
+          background-size: 48px 48px;
+          pointer-events:none;
+        }
+        .track-card {
+          background:#fff;
+          border:1.5px solid #e0eaff;
+          border-radius:20px;
+          overflow:hidden;
+          display:flex;
+          flex-direction:column;
+          box-shadow:0 4px 24px rgba(37,99,235,0.07);
+          transition:box-shadow 0.3s ease, transform 0.3s ease;
+        }
+        .track-card:hover {
+          box-shadow:0 12px 48px rgba(37,99,235,0.13);
+          transform:translateY(-2px);
+        }
+        .pill-row {
+          display:flex; align-items:center; gap:10;
+          background:#fafbff;
+          border:1px solid #e0eaff;
+          border-radius:10px;
+          padding:10px 14px;
+          transition:all 0.2s ease;
+          cursor:default;
+        }
+        .pill-row:hover {
+          background:#eff6ff;
+          border-color:#bfdbfe;
+        }
+        .explore-btn {
+          width:100%;
+          background:linear-gradient(135deg,#1d4ed8 0%,#2563eb 100%);
+          color:#fff;
+          font-family:'Plus Jakarta Sans',sans-serif;
+          font-weight:700;
+          font-size:0.84rem;
+          padding:14px 24px;
+          border-radius:10px;
+          border:none;
+          cursor:pointer;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          gap:8px;
+          box-shadow:0 4px 14px rgba(37,99,235,0.28);
+          transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        .explore-btn:hover {
+          box-shadow:0 8px 24px rgba(37,99,235,0.4);
+          transform:translateY(-2px);
+          background:linear-gradient(135deg,#1e40af 0%,#1d4ed8 100%);
+        }
+        .point-chip {
+          display:inline-flex;
+          align-items:center;
+          gap:5px;
+          background:#f0f7ff;
+          border:1px solid #dbeafe;
+          border-radius:5px;
+          padding:4px 10px;
+          font-size:0.7rem;
+          font-weight:600;
+          color:#1d4ed8;
+          white-space:nowrap;
+        }
+      `}</style>
+
+      <section
+        id="curriculum"
+        style={{ background:"white", padding:"96px 24px", fontFamily:"'Plus Jakarta Sans',sans-serif", position:"relative", overflow:"hidden" }}
+      >
+        <div className="curr-grid-bg" />
+        <div style={{ position:"absolute", top:-100, right:-80, width:500, height:500, background:"radial-gradient(circle,rgba(219,234,254,0.55) 0%,transparent 70%)", borderRadius:"50%", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", bottom:-80, left:-60, width:380, height:380, background:"radial-gradient(circle,rgba(219,234,254,0.4) 0%,transparent 70%)", borderRadius:"50%", pointerEvents:"none" }} />
+
+        <div style={{ maxWidth:1160, margin:"0 auto", position:"relative", zIndex:1 }}>
+
+          {/* Section header */}
+          <div style={{ textAlign:"center", marginBottom:60 }}>
+            <div style={{ display:"inline-flex", alignItems:"center", gap:8, background:"#eff6ff", border:"1px solid #bfdbfe", borderRadius:100, padding:"5px 16px", marginBottom:18 }}>
+              <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><circle cx="4" cy="4" r="3" fill="#2563eb"/></svg>
+              <span style={{ fontSize:"0.72rem", fontWeight:700, letterSpacing:"0.08em", textTransform:"uppercase", color:"#1d4ed8" }}>SAP Course Curriculum</span>
+            </div>
+            <h2 style={{ fontWeight:800, fontSize:"clamp(1.9rem,4vw,2.75rem)", color:"#0a1628", margin:"0 0 14px", lineHeight:1.1, letterSpacing:"-0.025em" }}>
+              Comprehensive SAP Training
+            </h2>
+            <p style={{ color:"#4a5a75", maxWidth:540, margin:"0 auto", lineHeight:1.8, fontSize:"1rem", fontWeight:400 }}>
+              Real-time training across 15 SAP modules — covering live projects, enterprise use cases, and placement-ready skills across both functional and technical tracks.
+            </p>
+
+            {/* Stats row */}
+            <div style={{ display:"flex", justifyContent:"center", gap:10, flexWrap:"wrap", marginTop:28 }}>
+              {[
+                { val:"15+", label:"SAP Modules" },
+                { val:"2", label:"Learning Tracks" },
+                { val:"4–10", label:"Weeks per Module" },
+                { val:"Live", label:"Project Training" },
+              ].map(s => (
+                <div key={s.label} style={{ background:"#fff", border:"1px solid #e0eaff", borderRadius:10, padding:"10px 20px", boxShadow:"0 2px 8px rgba(37,99,235,0.06)", textAlign:"center" }}>
+                  <div style={{ fontWeight:800, fontSize:"1.1rem", background:"linear-gradient(135deg,#1d4ed8,#3b82f6)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text" }}>{s.val}</div>
+                  <div style={{ fontSize:"0.68rem", fontWeight:600, color:"#64748b", textTransform:"uppercase", letterSpacing:"0.08em", marginTop:2 }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Two Track Cards */}
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(300px,1fr))", gap:24 }}>
+            {tracks.map(track => (
+              <div className="track-card" key={track.type}>
+                {/* Top accent bar */}
+                <div style={{ height:4, background:"linear-gradient(90deg,#1d4ed8,#3b82f6,#93c5fd)" }} />
+
+                <div style={{ padding:"clamp(20px,3vw,32px)", display:"flex", flexDirection:"column", flex:1, gap:0 }}>
+
+                  {/* Card header */}
+                  <div style={{ marginBottom:20 }}>
+                    <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:10 }}>
+                      <div style={{ display:"inline-flex", alignItems:"center", gap:7, background:"#eff6ff", border:"1px solid #bfdbfe", borderRadius:99, padding:"4px 12px" }}>
+                        <svg width="7" height="7" viewBox="0 0 7 7" fill="none"><circle cx="3.5" cy="3.5" r="3" fill="#2563eb"/></svg>
+                        <span style={{ fontSize:"0.68rem", fontWeight:700, color:"#1d4ed8", letterSpacing:"0.07em", textTransform:"uppercase" }}>{track.eyebrow}</span>
+                      </div>
+                      <span style={{ fontWeight:800, fontSize:"0.82rem", color:"#1d4ed8", background:"#eff6ff", border:"1px solid #bfdbfe", borderRadius:8, padding:"4px 12px" }}>
+                        {track.count} Modules
+                      </span>
+                    </div>
+                    <h3 style={{ fontWeight:800, fontSize:"clamp(1.1rem,2.5vw,1.35rem)", color:"#0a1628", margin:"0 0 10px", letterSpacing:"-0.02em" }}>{track.label}</h3>
+                    <p style={{ color:"#4a5a75", fontSize:"0.84rem", lineHeight:1.72, margin:0, fontWeight:400 }}>{track.desc}</p>
+                  </div>
+
+                  {/* Divider */}
+                  {/* <div style={{ display:"flex", alignItems:"center", gap:10, margin:"4px 0 16px" }}>
+                    <div style={{ flex:1, height:1, background:"#e0eaff" }} />
+                    <span style={{ fontSize:"0.65rem", fontWeight:600, color:"#94a3b8", letterSpacing:"0.08em", textTransform:"uppercase", whiteSpace:"nowrap" }}>All Modules</span>
+                    <div style={{ flex:1, height:1, background:"#e0eaff" }} />
+                  </div> */}
+
+                  {/* Module pills */}
+                  {/* <div style={{ display:"flex", flexDirection:"column", gap:8, flex:1 }}>
+                    {track.items.map(course => (
+                      <div className="pill-row" key={course.title}>
+                        <div style={{ width:34, height:34, borderRadius:9, background:"#eff6ff", border:"1px solid #bfdbfe", display:"flex", alignItems:"center", justifyContent:"center", color:"#1d4ed8", flexShrink:0 }}>
+                          {course.icon}
+                        </div>
+                        <div style={{ flex:1, minWidth:0 }}>
+                          <div style={{ fontWeight:700, fontSize:"0.84rem", color:"#0a1628" }}>{course.title}</div>
+                          <div style={{ fontSize:"0.7rem", color:"#64748b", marginTop:1, fontWeight:400, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{course.subtitle}</div>
+                        </div>
+                        <span style={{ fontSize:"0.68rem", color:"#1d4ed8", fontWeight:600, background:"#f0f7ff", border:"1px solid #dbeafe", padding:"2px 9px", borderRadius:99, flexShrink:0 }}>
+                          {course.details.duration}
+                        </span>
+                      </div>
+                    ))}
+                  </div> */}
+
+                  {/* CTA */}
+                  <button className="explore-btn" style={{ marginTop:24 }} onClick={() => setListModal(track.type)}>
+                    Explore {track.type} Modules <ArrowIcon />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom note */}
+          <div style={{ textAlign:"center", marginTop:40 }}>
+            <p style={{ fontSize:"0.82rem", color:"#94a3b8", fontWeight:400 }}>
+              Click any module in the list to view full syllabus, duration & learning outcomes.
+            </p>
+          </div>
+
+        </div>
+
+        {/* Bottom divider */}
+        <div style={{ height:1, background:"linear-gradient(90deg,transparent,rgba(37,99,235,0.2),transparent)", maxWidth:1160, margin:"60px auto 0" }} />
+      </section>
+
+      {listModal && (
+        <ModuleListModal
+          type={listModal}
+          items={listModal === "Functional" ? courses.functional : courses.technical}
+          onClose={() => setListModal(null)}
+          onSelect={c => { setListModal(null); setDetailModal(c); }}
+        />
+      )}
+      {detailModal && <ModuleModal course={detailModal} onClose={() => setDetailModal(null)} />}
+    </>
+  );
+};
+
+export default Curriculum;
