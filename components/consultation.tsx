@@ -112,21 +112,36 @@ const ConsultationForm = () => {
           className={inputClass}
         />
 
-        {/* Phone */}
-  <div className="flex-1">
-<div className="w-full">
-  <PhoneInput
-    country={"in"}
-    value={form.phone}
-    onChange={(phone) => setForm({ ...form, phone })}
-    enableSearch={true}
-    countryCodeEditable={false}
-    containerClass="w-full"
-    inputClass="!w-full !h-[44px] !rounded-xl !border !border-slate-200 !pl-14 !text-sm"
-    buttonClass="!border-none !bg-transparent"
-  />
-</div>
-  </div>
+        {/* Phone + Pincode */}
+        <div className="flex gap-2 items-center">
+          <div className="flex-1">
+            <div className="w-full">
+              <PhoneInput
+                country={"in"}
+                value={form.phone}
+                onChange={(phone) => setForm({ ...form, phone })}
+                enableSearch={true}
+                countryCodeEditable={false}
+                containerClass="w-full"
+                inputClass="!w-full !h-[44px] !rounded-xl !border !border-slate-200 !pl-14 !text-sm"
+                buttonClass="!border-none !bg-transparent"
+              />
+            </div>
+          </div>
+
+          <input
+            placeholder="Pincode"
+            value={form.pincode}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                pincode: e.target.value.replace(/\D/g, "").slice(0, 6),
+              })
+            }
+            maxLength={6}
+            className={`${inputClass} max-w-[130px]`}
+          />
+        </div>
 
         <textarea
           rows={3}
