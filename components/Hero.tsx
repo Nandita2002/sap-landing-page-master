@@ -24,17 +24,26 @@ const EMPTY_FORM: FormData = {
   course: "",
 };
 
+const FORM_ENDPOINT =
+  process.env.NEXT_PUBLIC_FORM_ENDPOINT ||
+  "https://script.google.com/macros/s/AKfycbwJVHAGRMFPfVpLC2rZiErn8dFcRY7E_1yqlKniUKe3aO5LiAADO_XEDS1EBpTuNpzxUA/exec";
+
+const toFormBody = (payload: Record<string, string>) =>
+  new URLSearchParams(payload).toString();
+
 export default function Hero() {
   const [consultationForm, setConsultationForm] = useState<FormData>(EMPTY_FORM);
   const [consultationErrors, setConsultationErrors] = useState<FormErrors>({});
   const [consultationLoading, setConsultationLoading] = useState(false);
   const [consultationSuccess, setConsultationSuccess] = useState(false);
+  const [consultationSubmitError, setConsultationSubmitError] = useState("");
 
   const [brochureOpen, setBrochureOpen] = useState(false);
   const [brochureForm, setBrochureForm] = useState<FormData>(EMPTY_FORM);
   const [brochureErrors, setBrochureErrors] = useState<FormErrors>({});
   const [brochureLoading, setBrochureLoading] = useState(false);
   const [brochureSuccess, setBrochureSuccess] = useState(false);
+  const [brochureSubmitError, setBrochureSubmitError] = useState("");
 
   const validate = (data: FormData) => {
     const newErrors: FormErrors = {};
@@ -69,16 +78,17 @@ export default function Hero() {
 
   const handleConsultationSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setConsultationSubmitError("");
     const nextErrors = validate(consultationForm);
     setConsultationErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
     setConsultationLoading(true);
     try {
-      const res = await fetch("/api/submit-form", {
+      const res = await fetch(FORM_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+        headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+        body: toFormBody({
           ...consultationForm,
           phone: `${consultationForm.countryCode} ${consultationForm.phone}`,
           goal: "Consultation requested via hero form",
@@ -98,7 +108,11 @@ export default function Hero() {
       }
     } catch (err) {
       console.error(err);
-      alert("Submission failed. Please try again.");
+      if (err instanceof TypeError) {
+        setConsultationSubmitError("Submission blocked by CORS/network. Please try again.");
+      } else {
+        setConsultationSubmitError("Submission failed. Please try again.");
+      }
     } finally {
       setConsultationLoading(false);
     }
@@ -106,16 +120,17 @@ export default function Hero() {
 
   const handleBrochureSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setBrochureSubmitError("");
     const nextErrors = validate(brochureForm);
     setBrochureErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
     setBrochureLoading(true);
     try {
-      const res = await fetch("/api/submit-form", {
+      const res = await fetch(FORM_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+        headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+        body: toFormBody({
           ...brochureForm,
           phone: `${brochureForm.countryCode} ${brochureForm.phone}`,
           goal: "Brochure download requested via hero popup",
@@ -145,7 +160,11 @@ export default function Hero() {
       }
     } catch (err) {
       console.error(err);
-      alert("Submission failed. Please try again.");
+      if (err instanceof TypeError) {
+        setBrochureSubmitError("Submission blocked by CORS/network. Please try again.");
+      } else {
+        setBrochureSubmitError("Submission failed. Please try again.");
+      }
     } finally {
       setBrochureLoading(false);
     }
@@ -330,6 +349,9 @@ export default function Hero() {
               >
                 {consultationLoading ? "Submitting..." : "Book Free Consultation"}
               </button>
+              {consultationSubmitError && (
+                <p className="text-red-500 text-xs text-center">{consultationSubmitError}</p>
+              )}
             </form>
           </div>
         </div>
@@ -464,6 +486,9 @@ export default function Hero() {
                 >
                   {brochureLoading ? "Submitting..." : "Submit & Download Brochure"}
                 </button>
+                {brochureSubmitError && (
+                  <p className="text-red-500 text-xs text-center">{brochureSubmitError}</p>
+                )}
               </form>
             </div>
           </div>
