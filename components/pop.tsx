@@ -71,45 +71,62 @@ const Popup = () => {
 
   if (!open) return null;
 
-  const handleSubmit = async () => {
-    if (loading) return;
+const handleSubmit = async () => {
+  if (loading) return;
 
-    if (!form.name || !form.email || !form.phone || !form.pincode) {
-      alert("Please fill all required fields");
-      return;
-    }
+  const cleanPhone = form.phone.replace(/\D/g, "");
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (form.pincode.length !== 6) {
-      alert("Enter valid pincode");
-      return;
-    }
+  if (!form.name.trim()) {
+    alert("Enter your name");
+    return;
+  }
 
-    setLoading(true);
+  if (!emailRegex.test(form.email)) {
+    alert("Enter valid email");
+    return;
+  }
 
-    try {
-      const res = await fetch("https://script.google.com/macros/s/AKfycbwJVHAGRMFPfVpLC2rZiErn8dFcRY7E_1yqlKniUKe3aO5LiAADO_XEDS1EBpTuNpzxUA/exec", {
+  if (cleanPhone.length < 10) {
+    alert("Enter valid phone number");
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    const payload = {
+      name: form.name.trim(),
+      email: form.email.trim(),
+      phone: cleanPhone,
+      message: form.message.trim(),
+    };
+
+    const res = await fetch(
+      "https://script.google.com/macros/s/AKfycbwJVHAGRMFPfVpLC2rZiErn8dFcRY7E_1yqlKniUKe3aO5LiAADO_XEDS1EBpTuNpzxUA/exec",
+      {
         method: "POST",
-        body: JSON.stringify(form),
-      });
-
-      const data = await res.json();
-
-      if (data.status === "success") {
-        setSuccess(true);
-        setForm({ name: "", email: "", phone: "", pincode: "", message: "" });
-
-        if (closeTimer.current) clearTimeout(closeTimer.current);
-        closeTimer.current = setTimeout(() => setOpen(false), 2500);
-      } else {
-        alert("Error: " + (data.message || "Try again"));
+        body: JSON.stringify(payload),
       }
-    } catch (err) {
-      alert("Network error");
-    } finally {
-      setLoading(false);
-    }
-  };
+    );
 
+    const data = await res.json();
+
+    if (data.status === "success") {
+      setSuccess(true);
+      setForm({ name: "", email: "", phone: "", pincode: "", message: "" });
+
+      if (closeTimer.current) clearTimeout(closeTimer.current);
+      closeTimer.current = setTimeout(() => setOpen(false), 2500);
+    } else {
+      alert("Something went wrong. Try again.");
+    }
+  } catch (err) {
+    alert("Network error. Try again.");
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div
       className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4"
