@@ -87,7 +87,7 @@ const Popup = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("YOUR_GOOGLE_SCRIPT_URL", {
+      const res = await fetch("https://script.google.com/macros/s/AKfycbwJVHAGRMFPfVpLC2rZiErn8dFcRY7E_1yqlKniUKe3aO5LiAADO_XEDS1EBpTuNpzxUA/exec", {
         method: "POST",
         body: JSON.stringify(form),
       });
