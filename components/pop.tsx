@@ -10,6 +10,10 @@ import { FaXTwitter } from "react-icons/fa6";
 const inputClass =
   "w-full border border-slate-200 bg-slate-50 rounded-xl px-3 py-2.5 text-sm text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-blue-500 transition placeholder:text-slate-400";
 
+const FORM_ENDPOINT =
+  process.env.NEXT_PUBLIC_FORM_ENDPOINT ||
+  "https://script.google.com/macros/s/AKfycbwJVHAGRMFPfVpLC2rZiErn8dFcRY7E_1yqlKniUKe3aO5LiAADO_XEDS1EBpTuNpzxUA/exec";
+
 // ✅ Social Icons (centered + clickable + brand colors)
 const SocialRow = () => (
   <div className="flex justify-center items-center gap-5 mt-2">
@@ -87,7 +91,7 @@ const Popup = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("YOUR_GOOGLE_SCRIPT_URL", {
+      const res = await fetch(FORM_ENDPOINT, {
         method: "POST",
         body: JSON.stringify(form),
       });
