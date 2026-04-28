@@ -14,30 +14,23 @@ const FORM_ENDPOINT =
   process.env.NEXT_PUBLIC_FORM_ENDPOINT ||
   "https://script.google.com/macros/s/AKfycbwJVHAGRMFPfVpLC2rZiErn8dFcRY7E_1yqlKniUKe3aO5LiAADO_XEDS1EBpTuNpzxUA/exec";
 
-// ✅ Social Icons (centered + clickable + brand colors)
 const SocialRow = () => (
   <div className="flex justify-center items-center gap-5 mt-2">
-
     <a href="https://www.instagram.com/rise_infotech/" target="_blank" rel="noopener noreferrer">
       <FaInstagram size={20} color="#E4405F" />
     </a>
-
     <a href="https://www.facebook.com/people/Rise-Infotech/100089059015353/" target="_blank" rel="noopener noreferrer">
       <FaFacebookF size={20} color="#1877F2" />
     </a>
-
     <a href="https://x.com/RiseInfotech" target="_blank" rel="noopener noreferrer">
       <FaXTwitter size={20} color="#000000" />
     </a>
-
     <a href="https://www.linkedin.com/company/rise-infotech/" target="_blank" rel="noopener noreferrer">
       <FaLinkedinIn size={20} color="#0A66C2" />
     </a>
-
     <a href="https://www.youtube.com/@rise_infotech" target="_blank" rel="noopener noreferrer">
       <FaYoutube size={20} color="#FF0000" />
     </a>
-
   </div>
 );
 
@@ -51,86 +44,81 @@ const Popup = () => {
     name: "",
     email: "",
     phone: "",
-    pincode: "",
     message: "",
   });
 
   useEffect(() => {
-    const openPopup = () => setOpen(true);
-    const timer = setTimeout(openPopup, 3000);
-    window.addEventListener("openEnquiry", openPopup);
-
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("openEnquiry", openPopup);
-    };
+    const timer = setTimeout(() => setOpen(true), 3000);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "auto";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
   }, [open]);
 
   if (!open) return null;
 
-const handleSubmit = async () => {
-  if (loading) return;
+  const handleSubmit = async () => {
+    if (loading) return;
 
-  const cleanPhone = form.phone.replace(/\D/g, "");
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const cleanPhone = form.phone.replace(/\D/g, "");
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (!form.name.trim()) {
-    alert("Enter your name");
-    return;
-  }
-
-  if (!emailRegex.test(form.email)) {
-    alert("Enter valid email");
-    return;
-  }
-
-  if (cleanPhone.length < 10) {
-    alert("Enter valid phone number");
-    return;
-  }
-
-  setLoading(true);
-
-  try {
-    const payload = {
-      name: form.name.trim(),
-      email: form.email.trim(),
-      phone: cleanPhone,
-      message: form.message.trim(),
-    };
-
-    const res = await fetch(
-      "https://script.google.com/macros/s/AKfycbwJVHAGRMFPfVpLC2rZiErn8dFcRY7E_1yqlKniUKe3aO5LiAADO_XEDS1EBpTuNpzxUA/exec",
-      {
-        method: "POST",
-        body: JSON.stringify(payload),
-      }
-    );
-
-    const data = await res.json();
-
-    if (data.status === "success") {
-      setSuccess(true);
-      setForm({ name: "", email: "", phone: "", pincode: "", message: "" });
-
-      if (closeTimer.current) clearTimeout(closeTimer.current);
-      closeTimer.current = setTimeout(() => setOpen(false), 2500);
-    } else {
-      alert("Something went wrong. Try again.");
+    if (!form.name.trim()) {
+      alert("Enter your name");
+      return;
     }
-  } catch (err) {
-    alert("Network error. Try again.");
-  } finally {
-    setLoading(false);
-  }
-};
+
+    if (!emailRegex.test(form.email)) {
+      alert("Enter valid email");
+      return;
+    }
+
+    if (cleanPhone.length < 10) {
+      alert("Enter valid phone number");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await fetch(FORM_ENDPOINT, {
+        method: "POST",
+        body: JSON.stringify({
+          name: form.name.trim(),
+          email: form.email.trim(),
+          phone: cleanPhone,
+          message: form.message.trim(),
+          source: "popup",
+        }),
+      });
+
+      // 🔥 important (Google Script safe parsing)
+      const text = await res.text();
+      let data;
+
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error("Invalid response");
+      }
+
+      if (data.status === "success") {
+        setSuccess(true);
+        setForm({ name: "", email: "", phone: "", message: "" });
+
+        if (closeTimer.current) clearTimeout(closeTimer.current);
+        closeTimer.current = setTimeout(() => setOpen(false), 2500);
+      } else {
+        alert("Something went wrong. Try again.");
+      }
+    } catch (err) {
+      alert("Network error. Try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div
       className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4"
@@ -182,36 +170,16 @@ const handleSubmit = async () => {
                 className={inputClass}
               />
 
-              {/* Phone + Pincode */}
-              <div className="flex gap-2 items-center">
-                <div className="flex-1">
-                  <div className="w-full">
-                    <PhoneInput
-                      country={"in"}
-                      value={form.phone}
-                      onChange={(phone) => setForm({ ...form, phone })}
-                      enableSearch={true}
-                      countryCodeEditable={false}
-                      containerClass="w-full"
-                      inputClass="!w-full !h-[44px] !rounded-xl !border !border-slate-200 !pl-14 !text-sm"
-                      buttonClass="!border-none !bg-transparent"
-                    />
-                  </div>
-                </div>
+              <PhoneInput
+                country={"in"}
+                value={form.phone}
+                onChange={(phone) => setForm({ ...form, phone })}
+                enableSearch
+                countryCodeEditable={false}
+                containerClass="w-full"
+                inputClass="!w-full !h-[44px] !rounded-xl !border !border-slate-200 !pl-14 !text-sm"
+              />
 
-                <input
-                  placeholder="Pincode"
-                  value={form.pincode}
-                  onChange={(e) =>
-                    setForm({
-                      ...form,
-                      pincode: e.target.value.replace(/\D/g, "").slice(0, 6),
-                    })
-                  }
-                  maxLength={6}
-                  className={`${inputClass} max-w-[130px]`}
-                />
-              </div>
               <textarea
                 rows={3}
                 placeholder="Message"
@@ -223,7 +191,11 @@ const handleSubmit = async () => {
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold"
+                className={`w-full py-3 rounded-xl font-semibold ${
+                  loading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-blue-600 text-white hover:bg-blue-700"
+                }`}
               >
                 {loading ? "Submitting..." : "Submit enquiry →"}
               </button>

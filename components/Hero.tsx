@@ -55,6 +55,21 @@ export default function Hero() {
     return newErrors;
   };
 
+const submitToGoogleScript = async (payload: Record<string,unknown>) => {
+  const res = await fetch(FORM_ENDPOINT, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+  const text = await res.text();
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    throw new Error("Invalid response");
+  }
+};
+
   const handleConsultationChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -71,89 +86,85 @@ export default function Hero() {
     if (brochureSuccess) setBrochureSuccess(false);
   };
 
-  const handleConsultationSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const nextErrors = validate(consultationForm);
-    setConsultationErrors(nextErrors);
-    if (Object.keys(nextErrors).length > 0) return;
+const handleConsultationSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-    setConsultationLoading(true);
-    try {
-      const res = await fetch(FORM_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...consultationForm,
-          phone: `${consultationForm.countryCode} ${consultationForm.phone}`,
-          goal: "Consultation requested via hero form",
-          source: "consultation",
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data?.message || "Failed to submit form");
-      }
+  const nextErrors = validate(consultationForm);
+  setConsultationErrors(nextErrors);
+  if (Object.keys(nextErrors).length > 0) return;
 
-      if (data.status === "success") {
-        setConsultationSuccess(true);
-        setConsultationForm(EMPTY_FORM);
-      } else {
-        alert("Error: " + (data.message || "Please try again."));
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Submission failed. Please try again.");
-    } finally {
-      setConsultationLoading(false);
+  setConsultationLoading(true);
+
+  try {
+    const cleanPhone = consultationForm.phone.replace(/\D/g, "");
+
+    const data = await submitToGoogleScript({
+      ...consultationForm,
+      phone: `${consultationForm.countryCode}${cleanPhone}`,
+      goal: "Consultation requested via hero form",
+      source: "consultation",
+    });
+
+    if (data.status === "success") {
+      setConsultationSuccess(true);
+      setConsultationForm(EMPTY_FORM);
+    } else {
+      alert("Something went wrong. Try again.");
     }
-  };
+  } catch (err) {
+    console.error(err);
+    alert("Network error. Try again.");
+  } finally {
+    setConsultationLoading(false);
+  }
+};
 
-  const handleBrochureSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const nextErrors = validate(brochureForm);
-    setBrochureErrors(nextErrors);
-    if (Object.keys(nextErrors).length > 0) return;
+const handleBrochureSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-    setBrochureLoading(true);
-    try {
-      const res = await fetch(FORM_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...brochureForm,
-          phone: `${brochureForm.countryCode} ${brochureForm.phone}`,
-          goal: "Brochure download requested via hero popup",
-          source: "popup",
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data?.message || "Failed to submit form");
-      }
+  const nextErrors = validate(brochureForm);
+  setBrochureErrors(nextErrors);
+  if (Object.keys(nextErrors).length > 0) return;
 
-      if (data.status === "success") {
-        setBrochureSuccess(true);
-        const brochureLink = document.createElement("a");
-        brochureLink.href = "/brochure.pdf";
-        brochureLink.download = "Rise-Infotech-SAP-Brochure.pdf";
-        document.body.appendChild(brochureLink);
-        brochureLink.click();
-        document.body.removeChild(brochureLink);
-        setBrochureForm(EMPTY_FORM);
-        setTimeout(() => {
-          setBrochureOpen(false);
-          setBrochureSuccess(false);
-        }, 1000);
-      } else {
-        alert("Error: " + (data.message || "Please try again."));
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Submission failed. Please try again.");
-    } finally {
-      setBrochureLoading(false);
+  setBrochureLoading(true);
+
+  try {
+    const cleanPhone = brochureForm.phone.replace(/\D/g, "");
+
+    const data = await submitToGoogleScript({
+      ...brochureForm,
+      phone: `${brochureForm.countryCode}${cleanPhone}`,
+      goal: "Brochure download requested via hero popup",
+      source: "popup",
+    });
+
+    if (data.status === "success") {
+      setBrochureSuccess(true);
+
+      // download brochure
+      const link = document.createElement("a");
+      link.href = "/brochure.pdf";
+      link.download = "Rise-Infotech-SAP-Brochure.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      setBrochureForm(EMPTY_FORM);
+
+      setTimeout(() => {
+        setBrochureOpen(false);
+        setBrochureSuccess(false);
+      }, 1000);
+    } else {
+      alert("Something went wrong. Try again.");
     }
-  };
+  } catch (err) {
+    console.error(err);
+    alert("Network error. Try again.");
+  } finally {
+    setBrochureLoading(false);
+  }
+};
 
   const scrollToCourses = () => {
     const el = document.getElementById("courses");
@@ -281,11 +292,11 @@ export default function Hero() {
                 </label>
                 <div className="flex gap-2">
                   <select
-                    name="countryCode"
-                    value={consultationForm.countryCode}
-                    onChange={handleConsultationChange}
-                    className="w-[34%] border border-gray-200 rounded-xl px-3 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white"
-                  >
+  name="countryCode"
+  value={brochureForm.countryCode}
+  onChange={handleBrochureChange}
+  aria-label="Country Code"
+>
                     <option value="+91">+91 (IN)</option>
                     <option value="+1">+1 (US)</option>
                     <option value="+44">+44 (UK)</option>
@@ -414,12 +425,13 @@ export default function Hero() {
                     Phone Number
                   </label>
                   <div className="flex gap-2">
-                    <select
-                      name="countryCode"
-                      value={brochureForm.countryCode}
-                      onChange={handleBrochureChange}
-                      className="w-[34%] border border-gray-200 rounded-xl px-3 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white"
-                    >
+                 <select
+  name="countryCode"
+  value={brochureForm.countryCode}
+  onChange={handleBrochureChange}
+  aria-label="Country Code"
+  className="w-[34%] border border-gray-200 rounded-xl px-3 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+>
                       <option value="+91">+91 (IN)</option>
                       <option value="+1">+1 (US)</option>
                       <option value="+44">+44 (UK)</option>

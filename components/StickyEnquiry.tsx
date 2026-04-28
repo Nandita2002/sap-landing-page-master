@@ -99,54 +99,58 @@ const StickyEnquiry: React.FC = () => {
     setForm((prev) => ({ ...prev, [name]: e.target.value }));
   };
 
-  const handleSubmit = async () => {
-    if (loading) return;
+ const handleSubmit = async () => {
+  if (loading) return;
 
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      const res = await fetch(FORM_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...form,
-          phone: `${countryCode}${form.phone}`,
-          source: "sticky_form",
-        }),
+  try {
+    const cleanPhone = form.phone.replace(/\D/g, "");
+
+    const res = await fetch(FORM_ENDPOINT, {
+      method: "POST",
+      // ❌ NO headers
+      body: JSON.stringify({
+        ...form,
+        phone: `${countryCode}${cleanPhone}`,
+        source: "sticky_form",
+      }),
+    });
+
+    // ✅ SAFE PARSE
+    const text = await res.text();
+    const data = JSON.parse(text);
+
+    if (data.status === "success") {
+      setToast({
+        type: "success",
+        message:
+          "You're all set! Our team will contact you shortly.",
       });
 
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data?.message);
-
-      if (data.status === "success") {
-        setToast({
-          type: "success",
-          message:
-            "You're all set! Our team will contact you shortly to guide you further.",
-        });
-
-        setForm({ name: "", email: "", phone: "", message: "" });
-        setCountryCode("+91");
-        setOpen(false);
-      } else {
-        setToast({
-          type: "error",
-          message: data.message || "Something went wrong",
-        });
-      }
-
-      setTimeout(() => setToast(null), 3000);
-    } catch {
+      setForm({ name: "", email: "", phone: "", message: "" });
+      setCountryCode("+91");
+      setOpen(false);
+    } else {
       setToast({
         type: "error",
-        message: "Something went wrong. Please try again.",
+        message: "Something went wrong",
       });
-      setTimeout(() => setToast(null), 3000);
-    } finally {
-      setLoading(false);
     }
-  };
+
+    setTimeout(() => setToast(null), 3000);
+
+  } catch (err) {
+    setToast({
+      type: "error",
+      message: "Network error. Try again.",
+    });
+
+    setTimeout(() => setToast(null), 3000);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <>
@@ -209,7 +213,10 @@ const StickyEnquiry: React.FC = () => {
               <PhoneInput
                 country={"in"}
                 value={form.phone}
-                onChange={(phone) => setForm({ ...form, phone })}
+                onChange={(phone) => {
+  const clean = phone.replace(/\D/g, "");
+  setForm({ ...form, phone: clean });
+}}
                 inputClass="!w-full !h-[42px] !rounded-xl !border !border-slate-200"
               />
 
