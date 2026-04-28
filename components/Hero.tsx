@@ -24,6 +24,10 @@ const EMPTY_FORM: FormData = {
   course: "",
 };
 
+const FORM_ENDPOINT =
+  process.env.NEXT_PUBLIC_FORM_ENDPOINT ||
+  "https://script.google.com/macros/s/AKfycbwJVHAGRMFPfVpLC2rZiErn8dFcRY7E_1yqlKniUKe3aO5LiAADO_XEDS1EBpTuNpzxUA/exec";
+
 export default function Hero() {
   const [consultationForm, setConsultationForm] = useState<FormData>(EMPTY_FORM);
   const [consultationErrors, setConsultationErrors] = useState<FormErrors>({});
@@ -75,7 +79,7 @@ export default function Hero() {
 
     setConsultationLoading(true);
     try {
-      const res = await fetch("/api/submit-form", {
+      const res = await fetch(FORM_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -112,7 +116,7 @@ export default function Hero() {
 
     setBrochureLoading(true);
     try {
-      const res = await fetch("/api/submit-form", {
+      const res = await fetch(FORM_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

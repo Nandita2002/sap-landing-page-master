@@ -16,6 +16,10 @@ type FormType = {
 
 type FieldName = keyof FormType;
 
+const FORM_ENDPOINT =
+  process.env.NEXT_PUBLIC_FORM_ENDPOINT ||
+  "https://script.google.com/macros/s/AKfycbwJVHAGRMFPfVpLC2rZiErn8dFcRY7E_1yqlKniUKe3aO5LiAADO_XEDS1EBpTuNpzxUA/exec";
+
 const inputBase =
   "w-full border border-slate-200 bg-slate-50 rounded-xl px-3 py-2 text-sm text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition placeholder:text-slate-400";
 
@@ -101,7 +105,7 @@ const StickyEnquiry: React.FC = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/submit-form", {
+      const res = await fetch(FORM_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

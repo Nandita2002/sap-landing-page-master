@@ -10,6 +10,10 @@ import { FaXTwitter } from "react-icons/fa6";
 const inputClass =
   "w-full border border-slate-200 bg-slate-50 rounded-xl px-3 py-2.5 text-sm text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-blue-500 transition placeholder:text-slate-400";
 
+const FORM_ENDPOINT =
+  process.env.NEXT_PUBLIC_FORM_ENDPOINT ||
+  "https://script.google.com/macros/s/AKfycbwJVHAGRMFPfVpLC2rZiErn8dFcRY7E_1yqlKniUKe3aO5LiAADO_XEDS1EBpTuNpzxUA/exec";
+
 // ✅ Social Icons (centered + clickable + brand colors)
 const SocialRow = () => (
   <div className="flex justify-center items-center gap-5 mt-2">
@@ -179,27 +183,35 @@ const handleSubmit = async () => {
               />
 
               {/* Phone + Pincode */}
-           <div className="flex gap-2 items-center">
+              <div className="flex gap-2 items-center">
+                <div className="flex-1">
+                  <div className="w-full">
+                    <PhoneInput
+                      country={"in"}
+                      value={form.phone}
+                      onChange={(phone) => setForm({ ...form, phone })}
+                      enableSearch={true}
+                      countryCodeEditable={false}
+                      containerClass="w-full"
+                      inputClass="!w-full !h-[44px] !rounded-xl !border !border-slate-200 !pl-14 !text-sm"
+                      buttonClass="!border-none !bg-transparent"
+                    />
+                  </div>
+                </div>
 
-  {/* Phone */}
-  <div className="flex-1">
-<div className="w-full">
-  <PhoneInput
-    country={"in"}
-    value={form.phone}
-    onChange={(phone) => setForm({ ...form, phone })}
-    enableSearch={true}
-    countryCodeEditable={false}
-    containerClass="w-full"
-    inputClass="!w-full !h-[44px] !rounded-xl !border !border-slate-200 !pl-14 !text-sm"
-    buttonClass="!border-none !bg-transparent"
-  />
-</div>
-  </div>
-
-
-
-</div>
+                <input
+                  placeholder="Pincode"
+                  value={form.pincode}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      pincode: e.target.value.replace(/\D/g, "").slice(0, 6),
+                    })
+                  }
+                  maxLength={6}
+                  className={`${inputClass} max-w-[130px]`}
+                />
+              </div>
               <textarea
                 rows={3}
                 placeholder="Message"
