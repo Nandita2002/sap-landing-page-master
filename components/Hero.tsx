@@ -174,9 +174,9 @@ const handleBrochureSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   };
 
   return (
-    <section className="relative overflow-hidden pt-4 pb-16 md:pt-6 md:pb-24 bg-white">
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-20 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-blue-200/40 blur-3xl" />
+   <section className="relative overflow-hidden pt-4 pb-16 md:pt-6 md:pb-24 bg-white">
+      <div className="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+       <div className="absolute -top-20 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-transparent" />
         <div className="absolute -bottom-16 right-0 h-64 w-64 rounded-full bg-indigo-200/40 blur-3xl" />
       </div>
 
@@ -187,6 +187,7 @@ const handleBrochureSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
               <span className="h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
               SAP Training · May 2026 Cohort
             </div>
+
 
             <h1 className="text-3xl sm:text-5xl lg:text-[3rem] xl:text-[3.2rem] font-extrabold tracking-tight text-slate-900 leading-tight mb-5 sm:mb-6">
               Build a High-Value{" "}

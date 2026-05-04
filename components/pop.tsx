@@ -15,22 +15,59 @@ const FORM_ENDPOINT =
   "https://script.google.com/macros/s/AKfycbwJVHAGRMFPfVpLC2rZiErn8dFcRY7E_1yqlKniUKe3aO5LiAADO_XEDS1EBpTuNpzxUA/exec";
 
 const SocialRow = () => (
-  <div className="flex justify-center items-center gap-5 mt-2">
-    <a href="https://www.instagram.com/rise_infotech/" target="_blank" rel="noopener noreferrer">
-      <FaInstagram size={20} color="#E4405F" />
+  <div className="flex justify-center items-center gap-2 mt-2">
+    
+    {/* Instagram */}
+    <a
+      href="https://www.instagram.com/rise_infotech/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="w-8 h-8 flex items-center justify-center rounded-md 
+      bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600"
+    >
+      <FaInstagram size={14} className="text-white" />
     </a>
-    <a href="https://www.facebook.com/people/Rise-Infotech/100089059015353/" target="_blank" rel="noopener noreferrer">
-      <FaFacebookF size={20} color="#1877F2" />
+
+    {/* Facebook */}
+    <a
+      href="https://www.facebook.com/people/Rise-Infotech/100089059015353/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="w-8 h-8 flex items-center justify-center rounded-md bg-[#1877F2]"
+    >
+      <FaFacebookF size={14} className="text-white" />
     </a>
-    <a href="https://x.com/RiseInfotech" target="_blank" rel="noopener noreferrer">
-      <FaXTwitter size={20} color="#000000" />
+
+    {/* X */}
+    <a
+      href="https://x.com/RiseInfotech"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="w-8 h-8 flex items-center justify-center rounded-md bg-black"
+    >
+      <FaXTwitter size={14} className="text-white" />
     </a>
-    <a href="https://www.linkedin.com/company/rise-infotech/" target="_blank" rel="noopener noreferrer">
-      <FaLinkedinIn size={20} color="#0A66C2" />
+
+    {/* LinkedIn */}
+    <a
+      href="https://www.linkedin.com/company/rise-infotech/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="w-8 h-8 flex items-center justify-center rounded-md bg-[#0A66C2]"
+    >
+      <FaLinkedinIn size={14} className="text-white" />
     </a>
-    <a href="https://www.youtube.com/@rise_infotech" target="_blank" rel="noopener noreferrer">
-      <FaYoutube size={20} color="#FF0000" />
+
+    {/* YouTube */}
+    <a
+      href="https://www.youtube.com/@rise_infotech"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="w-8 h-8 flex items-center justify-center rounded-md bg-[#FF0000]"
+    >
+      <FaYoutube size={14} className="text-white" />
     </a>
+
   </div>
 );
 

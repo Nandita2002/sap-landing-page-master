@@ -79,18 +79,22 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 h-16 md:h-16 flex items-center justify-between gap-3 md:gap-6">
-        <Link href="/" aria-label="Go to homepage" className="shrink-0">
-          <div className="relative h-8 w-[132px] sm:h-9 sm:w-[148px] md:h-10 md:w-[172px] overflow-hidden">
-            <Image
-              src="/logo.png"
-              alt="Rise Infotech"
-              fill
-              className="object-cover"
-              sizes="(max-width: 640px) 148px, 172px"
-              priority
-            />
-          </div>
-        </Link>
+     <Link
+  href="https://www.riseinfotech.in/"
+  aria-label="Go to homepage"
+  className="shrink-0"
+>
+  <div className="relative h-12 w-[180px] sm:h-14 sm:w-[200px] md:h-16 md:w-[230px]">
+    <Image
+      src="/logor.png"
+      alt="Rise Infotech"
+      fill
+      className="object-contain scale-110"
+      sizes="(max-width: 640px) 180px, 230px"
+      priority
+    />
+  </div>
+</Link>
 
         <nav className="hidden md:flex items-center justify-center flex-1 gap-7">
           {navLinks.map((link) => (

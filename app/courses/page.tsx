@@ -80,7 +80,11 @@ export default function CoursesPage() {
             <div
               key={index}
               onClick={() => router.push(course.path)}
-              className="group cursor-pointer rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-[0_8px_24px_rgba(15,23,42,0.08)] hover:shadow-[0_16px_36px_rgba(37,99,235,0.16)] transition-all duration-300 flex flex-col h-full hover:-translate-y-1"
+           className="group cursor-pointer rounded-2xl overflow-hidden border border-slate-200 bg-white 
+shadow-[0_6px_18px_rgba(15,23,42,0.06)] 
+hover:shadow-[0_20px_40px_rgba(15,23,42,0.12),0_8px_20px_rgba(37,99,235,0.12)] 
+hover:ring-2 hover:ring-blue-500/30 hover:border-blue-300
+transition-all duration-300 ease-out flex flex-col h-full hover:-translate-y-2"
             >
               <div className="overflow-hidden relative aspect-[16/9] w-full">
                 <Image

@@ -5,34 +5,39 @@ import { ChevronDown } from "lucide-react";
 
 const faqs = [
   {
-    question: "Is this SAP course suitable for beginners?",
+    question: "Who can join SAP MM course?",
     answer:
-      "Yes, this course is designed for absolute beginners as well as professionals looking to switch into SAP. We start from fundamentals and gradually move to advanced real-time scenarios.",
+      "Freshers, working professionals, and SAP end users can join this course. No prior SAP knowledge is required. You will be trained from basic to expert level to transition into SAP MM Consultant roles.",
   },
   {
-    question: "Which SAP module will I learn in this training?",
+    question: "Do I need coding knowledge for SAP MM?",
     answer:
-      "This training focuses on SAP S/4HANA MM (Materials Management), covering procurement, inventory management, and real-time business processes used in companies.",
+      "No. SAP MM is a functional module focused on business operations. Coding or programming knowledge is not required.",
   },
   {
-    question: "Will I get hands-on experience on SAP system?",
+    question: "Do you provide real-time projects?",
     answer:
-      "Yes, you will get practical exposure through live system access, real-time case studies, and assignments to ensure you gain industry-level experience.",
+      "Yes. You will work on end-to-end SAP S/4HANA projects including implementation, rollout, testing, data migration, and support using real-time scenarios.",
   },
   {
-    question: "Is certification included in this SAP course?",
+    question: "What tools will I learn?",
     answer:
-      "Yes, you will receive a course completion certificate. We also guide you on how to prepare for official SAP certification exams if required.",
+      "You will learn SAP ECC R/3, SAP S/4HANA (On-Premise & Cloud), Fiori Apps, and tools like Jira and ServiceNow used in real-time projects.",
   },
   {
-    question: "What are the career opportunities after SAP MM?",
+    question: "Is placement assistance provided?",
     answer:
-      "After completing this course, you can apply for roles like SAP MM Consultant, SAP Analyst, Procurement Specialist, and Supply Chain Executive in top MNCs.",
+      "Yes. We provide 100% placement assistance including resume building, Naukri and LinkedIn profile optimization, mock interviews, and job referrals.",
   },
   {
-    question: "Will I get placement assistance?",
+    question: "What salary can I expect?",
     answer:
-      "Yes, we provide end-to-end placement support including resume building, mock interviews, and referrals to hiring partners.",
+      "Freshers can expect ₹3–6 LPA, while candidates with 3+ years of experience can earn ₹12–14 LPA depending on skills and performance.",
+  },
+  {
+    question: "Can AI replace SAP MM Consultants?",
+    answer:
+      "No. AI can automate repetitive tasks, but SAP MM consultants are required for business decisions, system configuration, and client requirements. It remains a stable long-term career.",
   },
 ];
 const FAQ = () => {
@@ -45,18 +50,24 @@ const FAQ = () => {
   return (
     <section id="faq" className="py-20 px-4 bg-white">
       <div className="max-w-3xl mx-auto">
-        <div className="text-center">
-          <span className="inline-flex rounded-full border border-blue-200 bg-blue-50 px-4 py-1 text-xs font-semibold tracking-wide text-blue-700 uppercase mb-4">
-            Frequently Asked Questions
-          </span>
-          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900">
-            Frequently Asked Questions
-          </h2>
+       <div className="text-center max-w-2xl mx-auto">
+  
+  {/* Badge */}
+  <span className="inline-flex rounded-full border border-blue-200 bg-blue-50 px-4 py-1 text-xs font-semibold tracking-wide text-blue-700 uppercase mb-3">
+    FAQs
+  </span>
 
-          <p className="mt-3 text-slate-600">
-            Everything you need to know before getting started.
-          </p>
-        </div>
+  {/* Main Heading */}
+  <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900">
+    SAP S/4HANA MM Course FAQs
+  </h2>
+
+  {/* Subtext */}
+  <p className="mt-3 text-slate-600 text-sm sm:text-base">
+    Get clear answers about course eligibility, tools, placements, and career opportunities.
+  </p>
+
+</div>
 
         <div className="mt-10 space-y-4">
           {faqs.map((faq, index) => {

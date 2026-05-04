@@ -12,7 +12,7 @@ const TopBanner: React.FC = () => {
               Admissions Open for May 2026 Batch
             </span>
             <span className="text-blue-100/95">
-              Get up to 25% Scholarship on{" "}
+              Get up to 25% Special offer on{" "}
               <span className="font-semibold text-white">SAP</span> Courses
             </span>
           </div>

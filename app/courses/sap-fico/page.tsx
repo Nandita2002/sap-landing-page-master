@@ -33,7 +33,7 @@ export default function SAPFICOPage() {
               What is <SAP /> FICO?
             </h2>
 
-            <p className="text-gray-600 text-sm md:text-base leading-relaxed">
+            <p className="text-gray-600 text-base md:text-lg leading-relaxed">
               <SAP /> Financial Accounting and Controlling (FICO) is a core <SAP /> ERP module designed to manage financial transactions and cost control. 
               Accounts Payable handles vendor payments, Accounts Receivable manages customer billing, and Controlling (CO) supports budgeting and profitability analysis.
               <br /><br />
@@ -70,7 +70,7 @@ export default function SAPFICOPage() {
             ].map((item, i) => (
               <div
                 key={i}
-                className="bg-gray-50 border rounded-xl p-4 text-sm text-gray-700 hover:shadow-md transition"
+                className="bg-gray-50 border rounded-xl p-4 text-base md:text-lg text-gray-700 transition"
               >
                 {highlightSAP(item)}
               </div>
@@ -78,49 +78,56 @@ export default function SAPFICOPage() {
           </div>
         </div>
 
-        {/* CURRICULUM */}
-        <div>
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6">
-            What You Will Learn
-          </h2>
+       {/* CURRICULUM */}
+<div>
+  <h2 className="text-2xl font-semibold text-gray-900 mb-4 border-b border-gray-100 pb-2">
+    What You Will Learn
+  </h2>
 
-          <div className="grid md:grid-cols-2 gap-4">
-            {[
-  "SAP ERP Overview",
-  "SAP Architecture",
-  "SAP Functional and Technical modules overview",
-  "SAP -FICO Introduction",
-  "SAP System landscape",
-  "Enterprise Structure",
-  "General Ledger (GL) Accounting",
-  "Accounts Payable (AP) and Accounts receivable (AR)",
-  "Asset Accounting/Bank Accounting",
-  "Cost Element Accounting/ Cost Centre Accounting/ Profit Centre Accounting",
-  "Product Cost Controlling/ Profitability Analysis (CO-PA)",
-  "Cross functional Module integration with MM, SD, PP, PM, EWM",
-  "SAP S/4 HANA and Fiori Application Overview",
-  "Real time Project Topics",
-  "List of SAP Projects overview and Introduction",
-  "Activate Methodology",
-  "SAP S/4 HANA (On-Premises & Cloud Edition) Overview",
-  "TR movements",
-  "Different types of Testing",
-  "Prepare and Execute Test Scripts",
-  "Data Migration",
-  "Enhancements",
-  "Technical terminologies",
-  "Templates-BPML, KDS, FIT-Gap, FSD and User Manuals",
-  "Support Project"
-].map((item, i) => (
-              <div
-                key={i}
-                className="bg-gray-50 border rounded-xl p-4 text-sm text-gray-700 hover:shadow-md transition"
-              >
-                {highlightSAP(item)}
-              </div>
-            ))}
-          </div>
-        </div>
+  <div className="space-y-3 mt-6">
+    {[
+      "SAP ERP Overview",
+      "SAP Architecture",
+      "SAP Functional and Technical modules overview",
+      "SAP -FICO Introduction",
+      "SAP System landscape",
+      "Enterprise Structure",
+      "General Ledger (GL) Accounting",
+      "Accounts Payable (AP) and Accounts receivable (AR)",
+      "Asset Accounting/Bank Accounting",
+      "Cost Element Accounting/ Cost Centre Accounting/ Profit Centre Accounting",
+      "Product Cost Controlling/ Profitability Analysis (CO-PA)",
+      "Cross functional Module integration with MM, SD, PP, PM, EWM",
+      "SAP S/4 HANA and Fiori Application Overview",
+      "Real time Project Topics",
+      "List of SAP Projects overview and Introduction",
+      "Activate Methodology",
+      "SAP S/4 HANA (On-Premises & Cloud Edition) Overview",
+      "TR movements",
+      "Different types of Testing",
+      "Prepare and Execute Test Scripts",
+      "Data Migration",
+      "Enhancements",
+      "Technical terminologies",
+      "Templates-BPML, KDS, FIT-Gap, FSD and User Manuals",
+      "Support Project"
+    ].map((item, i) => (
+      <div key={i} className="flex items-start gap-3">
+
+        {/* Number */}
+        <span className="text-sm font-semibold text-blue-600 min-w-[28px]">
+          {String(i + 1).padStart(2, "0")}
+        </span>
+
+        {/* Content */}
+        <p className="text-base md:text-lg text-gray-700 leading-relaxed">
+          {highlightSAP(item)}
+        </p>
+
+      </div>
+    ))}
+  </div>
+</div>
 
         {/* CTA */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 p-8 text-center text-white shadow-xl">

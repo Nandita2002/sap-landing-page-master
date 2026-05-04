@@ -30,22 +30,59 @@ const Label = ({ children }: { children: React.ReactNode }) => (
 );
 
 const SocialRow = () => (
-  <div className="flex justify-center items-center gap-5 mt-2">
-    <a href="https://www.instagram.com/rise_infotech/" target="_blank" rel="noopener noreferrer">
-      <FaInstagram size={20} color="#E4405F" />
+  <div className="flex justify-center items-center gap-2 mt-2">
+    
+    {/* Instagram */}
+    <a
+      href="https://www.instagram.com/rise_infotech/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="w-8 h-8 flex items-center justify-center rounded-md 
+      bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600"
+    >
+      <FaInstagram size={14} className="text-white" />
     </a>
-    <a href="https://www.facebook.com/people/Rise-Infotech/100089059015353/" target="_blank" rel="noopener noreferrer">
-      <FaFacebookF size={20} color="#1877F2" />
+
+    {/* Facebook */}
+    <a
+      href="https://www.facebook.com/people/Rise-Infotech/100089059015353/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="w-8 h-8 flex items-center justify-center rounded-md bg-[#1877F2]"
+    >
+      <FaFacebookF size={14} className="text-white" />
     </a>
-    <a href="https://x.com/RiseInfotech" target="_blank" rel="noopener noreferrer">
-      <FaXTwitter size={20} color="#000000" />
+
+    {/* X */}
+    <a
+      href="https://x.com/RiseInfotech"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="w-8 h-8 flex items-center justify-center rounded-md bg-black"
+    >
+      <FaXTwitter size={14} className="text-white" />
     </a>
-    <a href="https://www.linkedin.com/company/rise-infotech/" target="_blank" rel="noopener noreferrer">
-      <FaLinkedinIn size={20} color="#0A66C2" />
+
+    {/* LinkedIn */}
+    <a
+      href="https://www.linkedin.com/company/rise-infotech/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="w-8 h-8 flex items-center justify-center rounded-md bg-[#0A66C2]"
+    >
+      <FaLinkedinIn size={14} className="text-white" />
     </a>
-    <a href="https://www.youtube.com/@rise_infotech" target="_blank" rel="noopener noreferrer">
-      <FaYoutube size={20} color="#FF0000" />
+
+    {/* YouTube */}
+    <a
+      href="https://www.youtube.com/@rise_infotech"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="w-8 h-8 flex items-center justify-center rounded-md bg-[#FF0000]"
+    >
+      <FaYoutube size={14} className="text-white" />
     </a>
+
   </div>
 );
 
@@ -175,85 +212,85 @@ const StickyEnquiry: React.FC = () => {
         </div>
       )}
 
-      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[9999] flex flex-col items-end gap-3">
-        {open && (
-          <div
-            className={`bg-white border border-slate-200 shadow-xl ${
-              isMobile
-                ? "fixed bottom-0 left-0 right-0 rounded-t-2xl"
-                : "w-[340px] rounded-2xl"
-            }`}
-          >
-            {/* Header */}
-            <div className="bg-blue-600 px-5 py-3.5 flex justify-between items-center">
-              <p className="text-white text-sm font-semibold">
-                Book your free demo
-              </p>
-              <button onClick={() => setOpen(false)}>✕</button>
-            </div>
-
-            {/* Form */}
-            <div className="p-4 flex flex-col gap-3">
-              <input
-                name="name"
-                placeholder="Full Name"
-                value={form.name}
-                onChange={handleChange}
-                className={inputBase}
-              />
-
-              <input
-                name="email"
-                placeholder="Email"
-                value={form.email}
-                onChange={handleChange}
-                className={inputBase}
-              />
-
-              <PhoneInput
-                country={"in"}
-                value={form.phone}
-                onChange={(phone) => {
-  const clean = phone.replace(/\D/g, "");
-  setForm({ ...form, phone: clean });
-}}
-                inputClass="!w-full !h-[42px] !rounded-xl !border !border-slate-200"
-              />
-
-              <textarea
-                name="message"
-                placeholder="Message"
-                value={form.message}
-                onChange={handleChange}
-                className={inputBase}
-              />
-
-              <button
-                onClick={handleSubmit}
-                className="bg-blue-600 text-white py-2.5 rounded-xl"
-              >
-                Submit
-              </button>
-
-               <SocialRow />
-            </div>
-          </div>
-        )}
-
-        {!open && (
-          <button
-            onClick={() => setOpen(true)}
-            className="bg-blue-600 text-white px-5 py-3 rounded-full"
-          >
-            Enquire now
-          </button>
-
-          
-        )
-        }
-
-       
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[9999] flex flex-col items-end gap-3">
+  {open && (
+    <div
+      className={`bg-white border border-slate-100 shadow-2xl ${
+        isMobile
+          ? "fixed bottom-0 left-0 right-0 rounded-t-3xl"
+          : "w-[340px] rounded-2xl"
+      }`}
+    >
+      {/* Header */}
+      <div className="bg-blue-600 px-5 py-4 flex justify-between items-center rounded-t-2xl">
+        <p className="text-white text-sm font-semibold tracking-wide">
+          Book your free demo
+        </p>
+        <button
+          onClick={() => setOpen(false)}
+          className="text-white text-lg hover:opacity-80 transition"
+        >
+          ✕
+        </button>
       </div>
+
+      {/* Form */}
+      <div className="p-5 flex flex-col gap-3">
+        <input
+          name="name"
+          placeholder="Full Name"
+          value={form.name}
+          onChange={handleChange}
+          className="w-full h-[42px] px-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+        />
+
+        <input
+          name="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={handleChange}
+          className="w-full h-[42px] px-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+        />
+
+        <PhoneInput
+          country={"in"}
+          value={form.phone}
+          onChange={(phone) => {
+            const clean = phone.replace(/\D/g, "");
+            setForm({ ...form, phone: clean });
+          }}
+          inputClass="!w-full !h-[42px] !rounded-xl !border !border-slate-200 focus:!ring-2 focus:!ring-blue-500 focus:!border-blue-500 !outline-none"
+        />
+
+        <textarea
+          name="message"
+          placeholder="Message"
+          value={form.message}
+          onChange={handleChange}
+          className="w-full min-h-[80px] px-3 py-2 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition resize-none"
+        />
+
+        <button
+          onClick={handleSubmit}
+          className="bg-blue-600 text-white py-2.5 rounded-xl font-medium hover:bg-blue-700 active:scale-[0.98] transition"
+        >
+          Submit
+        </button>
+
+        <SocialRow />
+      </div>
+    </div>
+  )}
+
+  {!open && (
+    <button
+      onClick={() => setOpen(true)}
+      className="bg-blue-600 text-white px-5 py-3 rounded-full shadow-lg hover:bg-blue-700 active:scale-95 transition"
+    >
+      Enquire now
+    </button>
+  )}
+</div>
     </>
   );
 };
