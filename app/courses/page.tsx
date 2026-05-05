@@ -9,8 +9,7 @@ const courses = [
   {
     title: "SAP MM",
     subtitle: "Materials Management",
-    image:
-      "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80",
+    image: "/sapmm.jpg",
     duration: "6–8 Weeks",
     level: "Beginner to Advanced",
     desc: "Procurement, inventory & supply chain processes",
@@ -19,8 +18,7 @@ const courses = [
   {
     title: "SAP SD",
     subtitle: "Sales & Distribution",
-    image:
-      "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1200&q=80",
+    image: "/sapsd.jpg",
     duration: "6–8 Weeks",
     level: "Beginner to Advanced",
     desc: "Order-to-cash, sales & billing workflows",
@@ -29,8 +27,7 @@ const courses = [
   {
     title: "SAP FICO",
     subtitle: "Finance & Controlling",
-    image:
-      "https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=1200&q=80",
+    image: "/sapfico.jpg",
     duration: "8–10 Weeks",
     level: "Intermediate to Advanced",
     desc: "Financial accounting & cost management",
@@ -39,8 +36,7 @@ const courses = [
   {
     title: "SAP ABAP",
     subtitle: "Advanced Business Application Programming",
-    image:
-      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80",
+    image: "/sapabap.jpg",
     duration: "8–10 Weeks",
     level: "Beginner to Advanced",
     desc: "ABAP coding for reports, interfaces, forms & enhancements",
