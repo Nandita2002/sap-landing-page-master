@@ -94,7 +94,7 @@ const ConsultationForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white p-6 rounded-2xl shadow border border-slate-200">
+    <div id="consultation-form" className="max-w-md mx-auto bg-white p-6 rounded-2xl shadow border border-slate-200">
 
       <h2 className="text-lg font-semibold mb-4 text-center">
         Book a Consultation

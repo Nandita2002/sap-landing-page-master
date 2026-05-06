@@ -119,18 +119,27 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <div className="hidden md:block">
-          <button
-            onClick={handleEnquiry}
-            aria-label="Book free consultation"
-            title="Book free consultation"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-700 to-blue-500 text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-[0_12px_24px_rgba(37,99,235,0.25)] hover:shadow-[0_16px_30px_rgba(37,99,235,0.35)] transition hover:-translate-y-0.5"
-          >
-            <Sparkles size={14} />
-            Free Consultation
-          </button>
-        </div>
-
+<div className="hidden md:block">
+  <button
+    onClick={() => {
+      window.open(
+        "https://wa.me/919110455125?text=Hi,%20I%E2%80%99m%20interested%20in%20SAP%20training.%20Can%20you%20share%20details?",
+        "_blank"
+      );
+    }}
+    aria-label="Chat with us on WhatsApp"
+    title="Chat with us"
+    className="inline-flex items-center justify-center px-5 h-11 rounded-full font-semibold text-white 
+               bg-gradient-to-r from-blue-600 to-blue-500 
+               hover:from-blue-700 hover:to-blue-600 
+               shadow-[0_8px_20px_rgba(37,99,235,0.25)] 
+               hover:shadow-[0_12px_28px_rgba(37,99,235,0.35)] 
+               transition-all duration-200 
+               active:scale-[0.98]"
+  >
+    Chat with us
+  </button>
+</div>
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
@@ -203,14 +212,25 @@ export default function Navbar() {
               );
             })}
 
-            <button
-              onClick={handleEnquiry}
-              aria-label="Book free consultation"
-              title="Book free consultation"
-              className="w-full bg-gradient-to-r from-blue-700 to-blue-500 text-white py-3 rounded-xl font-semibold hover:from-blue-800 hover:to-blue-600 transition"
-            >
-              Free Consultation
-            </button>
+<button
+  onClick={() => {
+    window.open(
+      "https://wa.me/919110455125?text=Hi,%20I%E2%80%99m%20interested%20in%20SAP%20training.%20Can%20you%20share%20details?",
+      "_blank"
+    );
+  }}
+  aria-label="Chat with us on WhatsApp"
+  title="Chat with us"
+  className="w-full h-12 rounded-full font-semibold text-white 
+             bg-gradient-to-r from-blue-600 to-blue-500 
+             hover:from-blue-700 hover:to-blue-600 
+             shadow-[0_8px_20px_rgba(37,99,235,0.3)] 
+             hover:shadow-[0_12px_28px_rgba(37,99,235,0.4)] 
+             transition-all duration-200 
+             active:scale-[0.98]"
+>
+  Chat with us
+</button>
           </div>
         </div>
       </div>
